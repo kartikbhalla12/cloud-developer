@@ -87,9 +87,9 @@ import { Car, cars as cars_list } from './cars';
 		if (!id) return res.status(400).send(`id is required`);
 
 		const carById: Car = cars.find(car => car.id.toString() === id);
-		if (carById) return res.status(200).send(carById);
+		if (!carById) return res.status(404).send('Not Found');
 
-		return res.status(404).send('Not Found');
+		return res.status(200).send(carById);
 	});
 
 	/// @TODO Add an endpoint to post a new car to our list
