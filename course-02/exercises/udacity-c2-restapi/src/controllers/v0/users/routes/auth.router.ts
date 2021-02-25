@@ -74,6 +74,10 @@ router.get(
 router.post('/login', async (req: Request, res: Response) => {
 	const email = req.body.email;
 	const password = req.body.password;
+
+	console.log(email);
+	console.log(password);
+
 	// check email is valid
 	if (!email || !EmailValidator.validate(email)) {
 		return res
@@ -89,20 +93,21 @@ router.post('/login', async (req: Request, res: Response) => {
 	}
 
 	const user = await User.findByPk(email);
+	console.log(user);
 	// check that user exists
 	if (!user) {
 		return res.status(401).send({ auth: false, message: 'Unauthorized' });
 	}
+	const authValid = await comparePasswords(password, user.password_hash);
 
 	// check that the password matches
-	const authValid = await comparePasswords(password, user.password_hash);
 
 	if (!authValid) {
 		return res.status(401).send({ auth: false, message: 'Unauthorized' });
 	}
 
 	// Generate JWT
-	const jwt = generateJWT(user);
+	const jwt = generateJWT(user.toJSON());
 
 	res.status(200).send({ auth: true, token: jwt, user: user.short() });
 });
