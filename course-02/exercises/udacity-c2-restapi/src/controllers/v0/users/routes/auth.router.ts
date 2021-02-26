@@ -38,9 +38,9 @@ function generateJWT(user: User): string {
 }
 
 export function requireAuth(req: Request, res: Response, next: NextFunction) {
-	console.warn(
-		"auth.router not yet implemented, you'll cover this in lesson 5"
-	);
+	// console.warn(
+	// 	"auth.router not yet implemented, you'll cover this in lesson 5"
+	// );
 	// return next();
 	if (!req.headers || !req.headers.authorization) {
 		return res.status(401).send({ message: 'No authorization headers.' });
@@ -52,7 +52,6 @@ export function requireAuth(req: Request, res: Response, next: NextFunction) {
 	}
 
 	const token = token_bearer[1];
-
 	return jwt.verify(token, config.dev.jwt_secret, (err, decoded) => {
 		if (err) {
 			return res
@@ -75,9 +74,6 @@ router.post('/login', async (req: Request, res: Response) => {
 	const email = req.body.email;
 	const password = req.body.password;
 
-	console.log(email);
-	console.log(password);
-
 	// check email is valid
 	if (!email || !EmailValidator.validate(email)) {
 		return res
@@ -93,7 +89,7 @@ router.post('/login', async (req: Request, res: Response) => {
 	}
 
 	const user = await User.findByPk(email);
-	console.log(user);
+
 	// check that user exists
 	if (!user) {
 		return res.status(401).send({ auth: false, message: 'Unauthorized' });
@@ -154,7 +150,7 @@ router.post('/', async (req: Request, res: Response) => {
 	}
 
 	// Generate JWT
-	const jwt = generateJWT(savedUser);
+	const jwt = generateJWT(savedUser.toJSON());
 
 	res.status(201).send({ token: jwt, user: savedUser.short() });
 });
