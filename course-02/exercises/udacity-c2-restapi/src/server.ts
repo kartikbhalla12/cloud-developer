@@ -1,6 +1,7 @@
 import express from 'express';
 import cors from 'cors';
 import { sequelize } from './sequelize';
+import './sentry';
 
 import { IndexRouter } from './controllers/v0/index.router';
 
