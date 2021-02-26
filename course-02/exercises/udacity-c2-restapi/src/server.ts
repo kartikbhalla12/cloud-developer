@@ -1,5 +1,7 @@
 import express from 'express';
+import cors from 'cors';
 import { sequelize } from './sequelize';
+import './sentry';
 
 import { IndexRouter } from './controllers/v0/index.router';
 
@@ -16,15 +18,17 @@ import { V0MODELS } from './controllers/v0/model.index';
 
 	app.use(bodyParser.json());
 
+	app.use(cors());
+
 	//CORS Should be restricted
-	app.use(function (req, res, next) {
-		res.header('Access-Control-Allow-Origin', '*');
-		res.header(
-			'Access-Control-Allow-Headers',
-			'Origin, X-Requested-With, Content-Type, Accept, Authorization'
-		);
-		next();
-	});
+	// app.use(function (req, res, next) {
+	// 	res.header('Access-Control-Allow-Origin', '*');
+	// 	res.header(
+	// 		'Access-Control-Allow-Headers',
+	// 		'Origin, X-Requested-With, Content-Type, Accept, Authorization'
+	// 	);
+	// 	next();
+	// });
 
 	app.use('/api/v0/', IndexRouter);
 
